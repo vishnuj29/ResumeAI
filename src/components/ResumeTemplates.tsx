@@ -659,7 +659,7 @@ export function CorporateTemplate({ content, accentColor }: TemplateProps) {
           {achievements.length > 0 && (
             <div>
               <h2 className="text-xs font-bold text-gray-900 uppercase tracking-widest mb-3" style={{ color: accentColor }}>Achievements</h2>
-              {achievements.map((ach, i) => (
+              {achievements.map((ach) => (
                 <div key={ach.id} className="relative pl-4 mb-2">
                   <div className="absolute left-0 top-1 w-2 h-2 rounded-full" style={{ backgroundColor: accentColor }} />
                   <div className="font-semibold text-gray-900 text-sm">{ach.title}</div>

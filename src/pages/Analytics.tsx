@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
-  BarChart3, TrendingUp, Eye, Download, FileText, Calendar,
-  ChevronDown, ChevronUp, Target
+  BarChart3, TrendingUp, Eye, Download, FileText,
+  Target
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
 import { supabase, Resume } from '../lib/supabase';
 
 type AnalyticsProps = {
@@ -14,10 +13,7 @@ type AnalyticsProps = {
 
 export default function Analytics({ onNavigate }: AnalyticsProps) {
   const { user } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const [resumes, setResumes] = useState<Resume[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [expandedMetric, setExpandedMetric] = useState<string | null>(null);
 
   const displayName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
 

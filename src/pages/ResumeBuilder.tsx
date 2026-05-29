@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import html2pdf from 'html2pdf.js';
 import {
   Save, Download, ArrowLeft, Sparkles, Plus, Trash2, ChevronDown, ChevronUp,
   Monitor, Smartphone, Palette, Type, LayoutTemplate, GripVertical,
-  CheckCircle, Loader2, Eye, Edit3, RefreshCw, X, ZoomIn, ZoomOut
+  CheckCircle, Loader2, Eye, Edit3, X
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase, Resume, ResumeContent, defaultResumeContent } from '../lib/supabase';

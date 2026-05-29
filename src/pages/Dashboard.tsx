@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Plus, FileText, TrendingUp, Clock, ChevronRight, MoreVertical,
   Trash2, Edit3, Copy, LayoutTemplate, Sparkles, Moon, Sun,
-  LogOut, User, Home, Settings, Bell, Search, BarChart3
+  LogOut, Home, Settings, Bell, Search, BarChart3
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, EyeOff, FileText, Sparkles, ArrowLeft, Mail, Lock, User, AlertCircle, CheckCircle, Loader2, ChevronRight, Zap } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { FaGoogle, FaGithub } from 'react-icons/fa';
+
 
 type AuthPage = 'login' | 'signup' | 'forgot-password';
 

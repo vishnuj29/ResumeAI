@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bot, Sparkles, X, Loader2, FileText, Wand2, MessageSquare, ChevronDown } from 'lucide-react';
+import { Send, Bot, Sparkles, X, Loader2, FileText, Wand2 } from 'lucide-react';
 
 type Message = {
   role: 'user' | 'ai';

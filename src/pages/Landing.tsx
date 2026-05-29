@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import {
-  Sparkles, Download, Eye, Zap, Shield, Palette, Globe, ChevronDown,
-  ChevronUp, Star, ArrowRight, CheckCircle, FileText, Brain, Layout,
-  TrendingUp, Clock, Users, Play, Wand2, LayoutDashboard, BarChart3,
-  Target, PenTool, Lightbulb, MessageSquare, Send, Bot, RefreshCw,
-  MousePointer2, FileDown, Settings, Copy, Layers, Monitor, Moon, Sun
+  Sparkles, Download, Eye, Shield, Palette, ChevronDown,
+  Star, ArrowRight, CheckCircle, FileText, Layout,
+  Wand2, LayoutDashboard, BarChart3,
+  Target, PenTool, Lightbulb, Send, Bot,
+  MousePointer2, FileDown, Settings, Layers
 } from 'lucide-react';
 
 type LandingProps = {

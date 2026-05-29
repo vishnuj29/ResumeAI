@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FileText, Moon, Sun, Menu, X, Sparkles, ChevronDown } from 'lucide-react';
+import { FileText, Moon, Sun, Menu, X, Sparkles } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -16,7 +16,6 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
   const { user, signOut } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [featuresOpen, setFeaturesOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
