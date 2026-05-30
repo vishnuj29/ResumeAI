@@ -94,11 +94,7 @@ export default function ResumeBuilder({ resumeId, onNavigate }: BuilderProps) {
   const [activeTab, setActiveTab] = useState<'content' | 'design'>('content');
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    initResume();
-  }, [resumeId]);
-
-  const initResume = async () => {
+  const initResume = useCallback(async () => {
     setLoading(true);
     if (resumeId) {
       const { data } = await supabase.from('resumes').select('*').eq('id', resumeId).maybeSingle();
@@ -113,7 +109,11 @@ export default function ResumeBuilder({ resumeId, onNavigate }: BuilderProps) {
       }
     }
     setLoading(false);
-  };
+  }, [resumeId]);
+
+  useEffect(() => {
+    initResume();
+  }, [initResume]);
 
   const saveResume = useCallback(async (currentContent: ResumeContent, currentTemplate: string, currentAccent: string, currentFont: string, currentTitle: string) => {
     if (!user) return;
@@ -171,14 +171,14 @@ export default function ResumeBuilder({ resumeId, onNavigate }: BuilderProps) {
     const opt = {
       margin: 0,
       filename: `${title.replace(/\s+/g, '_')}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
+      image: { type: 'jpeg' as const, quality: 0.98 },
       html2canvas: { scale: 2, useCORS: true },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const },
     };
 
     try {
       await html2pdf().set(opt).from(element).save();
-    } catch (err) {
+    } catch {
       // Fallback to print
       window.print();
     }
@@ -504,7 +504,7 @@ function ContentPanel({
             onRemove={id => updateContent(prev => ({ ...prev, education: prev.education.filter(e => e.id !== id) }))}
             expandedItems={expandedItems}
             setExpandedItems={setExpandedItems}
-            renderItem={(item: ReturnType<typeof content.education>[0], update) => (
+            renderItem={(item: typeof content.education[number], update) => (
               <div className="space-y-3">
                 <InputField label="Institution" value={item.institution} onChange={v => update({ institution: v })} />
                 <div className="grid grid-cols-2 gap-3">
@@ -519,7 +519,7 @@ function ContentPanel({
               </div>
             )}
             updateItem={(id, patch) => updateContent(prev => ({ ...prev, education: prev.education.map(e => e.id === id ? { ...e, ...patch } : e) }))}
-            getLabel={(item: ReturnType<typeof content.education>[0]) => item.institution || 'New Education'}
+            getLabel={(item: typeof content.education[number]) => item.institution || 'New Education'}
           />
         )}
         {activeSection === 'experience' && (
@@ -562,7 +562,7 @@ function ContentPanel({
             onRemove={id => updateContent(prev => ({ ...prev, certifications: prev.certifications.filter(c => c.id !== id) }))}
             expandedItems={expandedItems}
             setExpandedItems={setExpandedItems}
-            renderItem={(item: ReturnType<typeof content.certifications>[0], update) => (
+            renderItem={(item: typeof content.certifications[number], update) => (
               <div className="space-y-3">
                 <InputField label="Certification Name" value={item.name} onChange={v => update({ name: v })} />
                 <div className="grid grid-cols-2 gap-3">
@@ -573,7 +573,7 @@ function ContentPanel({
               </div>
             )}
             updateItem={(id, patch) => updateContent(prev => ({ ...prev, certifications: prev.certifications.map(c => c.id === id ? { ...c, ...patch } : c) }))}
-            getLabel={(item: ReturnType<typeof content.certifications>[0]) => item.name || 'New Certification'}
+            getLabel={(item: typeof content.certifications[number]) => item.name || 'New Certification'}
           />
         )}
         {activeSection === 'languages' && (
@@ -587,7 +587,7 @@ function ContentPanel({
             onRemove={id => updateContent(prev => ({ ...prev, languages: prev.languages.filter(l => l.id !== id) }))}
             expandedItems={expandedItems}
             setExpandedItems={setExpandedItems}
-            renderItem={(item: ReturnType<typeof content.languages>[0], update) => (
+            renderItem={(item: typeof content.languages[number], update) => (
               <div className="grid grid-cols-2 gap-3">
                 <InputField label="Language" value={item.language} onChange={v => update({ language: v })} />
                 <div>
@@ -606,7 +606,7 @@ function ContentPanel({
               </div>
             )}
             updateItem={(id, patch) => updateContent(prev => ({ ...prev, languages: prev.languages.map(l => l.id === id ? { ...l, ...patch } : l) }))}
-            getLabel={(item: ReturnType<typeof content.languages>[0]) => item.language || 'New Language'}
+            getLabel={(item: typeof content.languages[number]) => item.language || 'New Language'}
           />
         )}
         {activeSection === 'achievements' && (
@@ -620,7 +620,7 @@ function ContentPanel({
             onRemove={id => updateContent(prev => ({ ...prev, achievements: prev.achievements.filter(a => a.id !== id) }))}
             expandedItems={expandedItems}
             setExpandedItems={setExpandedItems}
-            renderItem={(item: ReturnType<typeof content.achievements>[0], update) => (
+            renderItem={(item: typeof content.achievements[number], update) => (
               <div className="space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <InputField label="Title" value={item.title} onChange={v => update({ title: v })} />
@@ -630,7 +630,7 @@ function ContentPanel({
               </div>
             )}
             updateItem={(id, patch) => updateContent(prev => ({ ...prev, achievements: prev.achievements.map(a => a.id === id ? { ...a, ...patch } : a) }))}
-            getLabel={(item: ReturnType<typeof content.achievements>[0]) => item.title || 'New Achievement'}
+            getLabel={(item: typeof content.achievements[number]) => item.title || 'New Achievement'}
           />
         )}
         {activeSection === 'interests' && (

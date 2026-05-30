@@ -4,7 +4,6 @@ import {
   BarChart3, TrendingUp, Eye, Download, FileText,
   Target
 } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
 import { supabase, Resume } from '../lib/supabase';
 
 type AnalyticsProps = {
@@ -12,10 +11,8 @@ type AnalyticsProps = {
 };
 
 export default function Analytics({ onNavigate }: AnalyticsProps) {
-  const { user } = useAuth();
   const [resumes, setResumes] = useState<Resume[]>([]);
-
-  const displayName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -95,6 +92,19 @@ export default function Analytics({ onNavigate }: AnalyticsProps) {
   ];
 
   const maxViews = Math.max(...monthlyData.map(d => d.views));
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+        <div className="text-center">
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+            <FileText className="w-6 h-6" />
+          </div>
+          <p className="mt-4 text-sm text-gray-600 dark:text-gray-300">Loading analytics...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex">

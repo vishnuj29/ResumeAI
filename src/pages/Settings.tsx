@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  User, Bell, Shield, Palette, Link, Globe, Moon, Sun,
-  Save, CheckCircle, Loader2, Mail, Lock, Smartphone,
-  CreditCard, FileText, HelpCircle, LogOut
+  User, Bell, Shield, Palette, Moon, Sun,
+  Save, CheckCircle, Loader2, Smartphone,
+  CreditCard, FileText, LogOut
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';

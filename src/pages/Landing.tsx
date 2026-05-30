@@ -1,11 +1,11 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import {
   Sparkles, Download, Eye, Shield, Palette, ChevronDown,
   Star, ArrowRight, CheckCircle, FileText, Layout,
   Wand2, LayoutDashboard, BarChart3,
   Target, PenTool, Lightbulb, Send, Bot,
-  MousePointer2, FileDown, Settings, Layers
+  MousePointer2, FileDown, Settings, Layers, Play
 } from 'lucide-react';
 
 type LandingProps = {
@@ -314,7 +314,7 @@ function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: strin
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isInView) {
       const duration = 2000;
       const steps = 60;
