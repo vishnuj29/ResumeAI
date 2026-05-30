@@ -1,9 +1,36 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL as string) || '';
+const supabaseAnonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY as string) || '';
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const MISSING_ENV_MESSAGE =
+  'Missing Supabase environment variables: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.\n' +
+  'On Vercel set these in Project → Settings → Environment Variables (Production) and redeploy.\n' +
+  'Locally you can add them to a .env file or pass them into the build environment.';
+
+let _supabase: any;
+if (!supabaseUrl || !supabaseAnonKey) {
+  // Log a clear message so it appears in Vercel logs / browser console
+  // and provide a proxy that throws with a helpful message when used.
+  // This avoids an opaque "supabaseUrl is required" uncaught error.
+  // The app will still fail gracefully when attempting to access Supabase functionality.
+  // eslint-disable-next-line no-console
+  console.error(MISSING_ENV_MESSAGE);
+
+  const handler = {
+    get() {
+      return () => {
+        throw new Error(MISSING_ENV_MESSAGE);
+      };
+    },
+  };
+
+  _supabase = new Proxy({}, handler);
+} else {
+  _supabase = createClient(supabaseUrl, supabaseAnonKey);
+}
+
+export const supabase = _supabase;
 
 export type ResumeContent = {
   personal: {
