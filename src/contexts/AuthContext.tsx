@@ -23,22 +23,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    }).catch((error) => {
-      console.error('Auth error:', error);
-      setLoading(false);
-    });
+    // Defensive guards: some deployments may produce a supabase client
+    // that does not expose the full auth API (or envs were missing at build time).
+    try {
+      const auth = (supabase as any).auth;
+      if (auth && typeof auth.getSession === 'function') {
+        auth.getSession().then(({ data: { session } }: any) => {
+          setSession(session);
+          setUser(session?.user ?? null);
+          setLoading(false);
+        }).catch((error: any) => {
+          console.error('Auth error:', error);
+          setLoading(false);
+        });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
+        if (typeof auth.onAuthStateChange === 'function') {
+          const { data: { subscription } } = auth.onAuthStateChange((_event: any, session: any) => {
+            setSession(session);
+            setUser(session?.user ?? null);
+            setLoading(false);
+          });
+          return () => subscription?.unsubscribe?.();
+        }
+      } else {
+        console.error('Supabase auth API unavailable. Ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY were provided at build time and that @supabase/supabase-js is the expected version.');
+        setLoading(false);
+      }
+    } catch (e) {
+      // Catch any unexpected shape errors and avoid crashing the app
+      // eslint-disable-next-line no-console
+      console.error('Unexpected auth initialization error:', e);
       setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+    }
+    return undefined;
   }, []);
 
   const signUp = async (email: string, password: string, fullName: string) => {
