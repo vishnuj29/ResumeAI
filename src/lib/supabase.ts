@@ -17,15 +17,21 @@ if (!supabaseUrl || !supabaseAnonKey) {
   // eslint-disable-next-line no-console
   console.error(MISSING_ENV_MESSAGE);
 
-  const handler = {
-    get() {
-      return () => {
+  const createMissingProxy = (): any => {
+    const thrower = () => {
+      throw new Error(MISSING_ENV_MESSAGE);
+    };
+    return new Proxy(thrower, {
+      get() {
+        return createMissingProxy();
+      },
+      apply() {
         throw new Error(MISSING_ENV_MESSAGE);
-      };
-    },
+      },
+    });
   };
 
-  _supabase = new Proxy({}, handler);
+  _supabase = createMissingProxy();
 } else {
   _supabase = createClient(supabaseUrl, supabaseAnonKey);
 }
